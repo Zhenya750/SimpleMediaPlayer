@@ -12,17 +12,25 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Collections.ObjectModel;
 
 namespace SimpleMediaPlayer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+
+            _mediafiles = new ObservableCollection<Mediafile>
+            {
+                new Mediafile("Some title", "some path"),
+                new Mediafile("Some title 2", " somepath2"),
+                new Mediafile("Something other title", ""),
+            };
+
+            LbMediafile.ItemsSource = _mediafiles;
+            _addingMediafiles = new List<Mediafile>();
         }
     }
 }
