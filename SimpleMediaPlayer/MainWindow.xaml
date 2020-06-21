@@ -20,10 +20,10 @@
         <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#454545"/>
         <SolidColorBrush x:Key="Item.MouseOver.Foreground" Color="White"/>
         <SolidColorBrush x:Key="Item.MouseOver.Border" Color="#606060"/>
-        <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
-        <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#FFDADADA"/>
-        <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA"/>
-        <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#FF26A0DA"/>
+        <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#404040"/>
+        <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="#606060"/>
+        <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#404040"/>
+        <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="#606060"/>
         <Style x:Key="ListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="Padding" Value="10 0 10 0"/>
@@ -229,49 +229,295 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <!--PlayPausePrevNext buttons style-->
+        <SolidColorBrush x:Key="PPPNbutton.Static.Background" Color="Transparent"/>
+        <SolidColorBrush x:Key="PPPNbutton.Static.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="PPPNbutton.MouseOver.Background" Color="Transparent"/>
+        <SolidColorBrush x:Key="PPPNbutton.MouseOver.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="PPPNbutton.Pressed.Background" Color="#454545"/>
+        <SolidColorBrush x:Key="PPPNbutton.Pressed.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="PPPNbutton.Disabled.Background" Color="#2C2C2C"/>
+        <SolidColorBrush x:Key="PPPNbutton.Disabled.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="PPPNbutton.Disabled.Foreground" Color="#363636"/>
+        <Style x:Key="PPPNbuttonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource PPPNbutton.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PPPNbutton.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource PPPNbutton.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PPPNbutton.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource PPPNbutton.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PPPNbutton.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource PPPNbutton.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PPPNbutton.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource PPPNbutton.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Icons inside PPPNbutton style-->
+        <SolidColorBrush x:Key="IconColor" Color="#A8A8A8"/>
+        <Style x:Key="IconInPPPNbuttonStyle" TargetType="{x:Type Path}">
+            <Setter Property="Fill" Value="{StaticResource IconColor}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}" Value="True">
+                    <Setter Property="Fill" Value="White"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--SliderStyle -->
+        <Style x:Key="SliderRepeatButtonAfterThumb" TargetType="{x:Type RepeatButton}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border BorderThickness="1" BorderBrush="#282828" Background="#282828" Height="4"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SliderRepeatButtonBeforeThumb" TargetType="{x:Type RepeatButton}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border SnapsToDevicePixels="True" Background="#60D6FF"  BorderThickness="1" BorderBrush="#60D6FF" Height="4"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SliderThumb" TargetType="{x:Type Thumb}">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Ellipse Height="10" Width="10" Fill="#CACACA">
+                        </Ellipse>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="SliderTemplate"  TargetType="{x:Type Slider}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Track Grid.Row="1" x:Name="PART_Track"   >
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderRepeatButtonAfterThumb}" Command="Slider.IncreaseLarge" />
+                    </Track.IncreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource SliderThumb}"  />
+                    </Track.Thumb>
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderRepeatButtonBeforeThumb}"  Command="Slider.DecreaseLarge" />
+                    </Track.DecreaseRepeatButton>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+
+        <Style x:Key="HorizontalSliderStyle" TargetType="{x:Type Slider}">
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template" Value="{StaticResource SliderTemplate}"/>
+        </Style>
+
+        <!--Usual button style-->
+        <SolidColorBrush x:Key="UsualButton.Static.Background" Color="#404040"/>
+        <SolidColorBrush x:Key="UsualButton.Static.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="UsualButton.MouseOver.Background" Color="#454545"/>
+        <SolidColorBrush x:Key="UsualButton.MouseOver.Foreground" Color="White"/>
+        <SolidColorBrush x:Key="UsualButton.MouseOver.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="UsualButton.Pressed.Background" Color="#414141"/>
+        <SolidColorBrush x:Key="UsualButton.Pressed.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="UsualButton.Disabled.Background" Color="#2C2C2C"/>
+        <SolidColorBrush x:Key="UsualButton.Disabled.Border" Color="Transparent"/>
+        <SolidColorBrush x:Key="UsualButton.Disabled.Foreground" Color="#363636"/>
+        <Style x:Key="UsualButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource UsualButton.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource UsualButton.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true" CornerRadius="8">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource UsualButton.MouseOver.Background}"/>
+                                <Setter Property="Foreground" Value="{StaticResource UsualButton.MouseOver.Foreground}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource UsualButton.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource UsualButton.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource UsualButton.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource UsualButton.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource UsualButton.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource UsualButton.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Column="0"
-                 SelectionMode="Single" 
-                 Name="LbMediafile" 
-                 Background="#363636"
-                 Foreground="White"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"
-                 AllowDrop="True"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 PreviewDragEnter="LbMediafile_PreviewDragEnter" 
-                 Drop="LbMediafile_PreviewDrop" 
-                 ItemContainerStyle="{DynamicResource ListBoxItemStyle}">
+        <Grid Grid.Column="0" Background="#363636">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}" Height="32">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="64"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" Margin="0" VerticalAlignment="Center"/>
-                        <Button x:Name="bRemoveLbiMediafile" 
-                                Grid.Column="1" 
-                                Width="22" Height="22" 
-                                HorizontalAlignment="Right" 
-                                Margin="0 0 40 0"
-                                PreviewMouseLeftButtonDown="BRemoveLbiMediafile_PreviewMouseLeftButtonDown" 
-                                Style="{StaticResource RemoveItemButtonStyle}">
-                            <Canvas Name="p" Width="{Binding Path=ActualWidth, ElementName=bRemoveLbiMediafile}" Height="{Binding Path=ActualHeight, ElementName=bRemoveLbiMediafile}" Background="Transparent">
-                                <Line X1="3" Y1="3" X2="15" Y2="15" Style="{StaticResource LineInRemoveItemButtonStyle}"/>
-                                <Line X1="15" Y1="3" X2="3" Y2="15" Style="{StaticResource LineInRemoveItemButtonStyle}"/>
-                            </Canvas>
-                        </Button>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox> 
+            <ListBox
+                     Name="LbMediafile"
+                     Grid.Row="0"
+                     SelectionMode="Single" 
+                     Background="#363636"
+                     BorderThickness="0"
+                     BorderBrush="#363636"
+                     HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     AllowDrop="True"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     PreviewDragEnter="LbMediafile_PreviewDragEnter" 
+                     Drop="LbMediafile_PreviewDrop" 
+                     ItemContainerStyle="{DynamicResource ListBoxItemStyle}">
+            
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}" Height="32">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="64"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" Margin="0" VerticalAlignment="Center"/>
+                            <Button x:Name="bRemoveLbiMediafile" 
+                                    Grid.Column="1" 
+                                    Width="22" Height="22" 
+                                    HorizontalAlignment="Right" 
+                                    Margin="0 0 40 0"
+                                    PreviewMouseLeftButtonDown="BRemoveLbiMediafile_PreviewMouseLeftButtonDown" 
+                                    Style="{StaticResource RemoveItemButtonStyle}">
+                                <Canvas Name="p" Width="{Binding Path=ActualWidth, ElementName=bRemoveLbiMediafile}" Height="{Binding Path=ActualHeight, ElementName=bRemoveLbiMediafile}" Background="Transparent">
+                                    <Line X1="3" Y1="3" X2="15" Y2="15" Style="{StaticResource LineInRemoveItemButtonStyle}"/>
+                                    <Line X1="15" Y1="3" X2="3" Y2="15" Style="{StaticResource LineInRemoveItemButtonStyle}"/>
+                                </Canvas>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <StackPanel Grid.Row="1" Orientation="Vertical">
+                <Separator HorizontalAlignment="Stretch" Background="#404040"/>
+                <Button Name="bAddMediafile" Content="Add mediafile"  Width="128" Margin="10" Foreground="#C4C4C4" Padding="3" Style="{StaticResource UsualButtonStyle}"/>
+            </StackPanel>
+        </Grid>
+        
+        <Grid Grid.Column="1" Background="#282828">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Vertical" Grid.Row="1" Background="#404040">
+
+                <Grid VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="00:00:00" Foreground="#C4C4C4" HorizontalAlignment="Left" FontSize="10" VerticalAlignment="Center" Margin="10"/>
+                    <Slider Grid.Column="1" VerticalAlignment="Center" Minimum="0" Style="{StaticResource HorizontalSliderStyle}"/>
+                    <TextBlock  Grid.Column="2" Text="00:03:46" Foreground="#C4C4C4" HorizontalAlignment="Right" FontSize="10" VerticalAlignment="Center" Margin="10"/>
+                </Grid>
+
+                <Separator HorizontalAlignment="Stretch" Background="#555555"/>
+
+                <StackPanel Orientation="Horizontal" Margin="10 5 10 5">
+                    <Button Name="bPrevious" Style="{StaticResource PPPNbuttonStyle}">
+                        <Canvas Height="24" Width="24">
+                            <Path Data="M6,18V6H8V18H6M9.5,12L18,6V18L9.5,12Z" Style="{StaticResource IconInPPPNbuttonStyle}"/>
+                        </Canvas>
+                    </Button>
+
+                    <Button Name="bPlay" Style="{StaticResource PPPNbuttonStyle}">
+                        <Canvas Width="24" Height="24">
+                            <Path Data="M8,5.14V19.14L19,12.14L8,5.14Z" Style="{StaticResource IconInPPPNbuttonStyle}"/>
+                        </Canvas>
+                    </Button>
+
+                    <Button Name="bPause" IsEnabled="False" Visibility="Collapsed" Style="{StaticResource PPPNbuttonStyle}">
+                        <Canvas Height="24" Width="24">
+                            <Path Data="M14,19H18V5H14M6,19H10V5H6V19Z" Style="{StaticResource IconInPPPNbuttonStyle}"/>
+                        </Canvas>
+                    </Button>
+
+                    <Button Name="bNext" Style="{StaticResource PPPNbuttonStyle}">
+                        <Canvas Height="24" Width="24">
+                            <Path Data="M16,18H18V6H16M6,18L14.5,12L6,6V18Z" Style="{StaticResource IconInPPPNbuttonStyle}"/>
+                        </Canvas>
+                    </Button>
+                    
+                    <Slider Name="sVolume" Width="50" VerticalAlignment="Center" Margin="10 0 0 0" Maximum="100" Minimum="0" Style="{StaticResource HorizontalSliderStyle}"/>
+                </StackPanel>
+
+            </StackPanel>
+            
+            
+        </Grid>
     </Grid>
 </Window>
