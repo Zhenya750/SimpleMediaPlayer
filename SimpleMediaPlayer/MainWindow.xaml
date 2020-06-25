@@ -74,7 +74,6 @@
             </Setter>
 
             <EventSetter Event="PreviewMouseLeftButtonDown" Handler="LbiMediafile_PreviewMouseLeftButtonDown"/>
-            <EventSetter Event="Drop" Handler="LbiMediafile_Drop"/>
             <EventSetter Event="PreviewDragEnter" Handler="LbiMediafile_PreviewDragEnter"/>
         </Style>
 
@@ -431,7 +430,7 @@
                      AllowDrop="True"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      PreviewDragEnter="LbMediafile_PreviewDragEnter" 
-                     Drop="LbMediafile_PreviewDrop" 
+                     Drop="LbMediafile_Drop" 
                      ItemContainerStyle="{DynamicResource ListBoxItemStyle}">
             
                 <ListBox.ItemTemplate>
@@ -464,12 +463,15 @@
                 <Button Name="bAddMediafile" Content="Add mediafile"  Width="128" Margin="10" Foreground="#C4C4C4" Padding="3" Style="{StaticResource UsualButtonStyle}"/>
             </StackPanel>
         </Grid>
-        
+
         <Grid Grid.Column="1" Background="#282828">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
+
+            <MediaElement Name="mediaElement" Source="C:\Users\Zheka\Desktop\c#projects\attempt3\SimpleMediaPlayer\SimpleMediaPlayer\bin\Debug\clip.mp4" LoadedBehavior="Manual" UnloadedBehavior="Close" ScrubbingEnabled="True" MediaOpened="MediaElement_MediaOpened" MediaEnded="MediaElement_MediaEnded" MediaFailed="MediaElement_MediaFailed" />
+
 
             <StackPanel Orientation="Vertical" Grid.Row="1" Background="#404040">
 
@@ -480,44 +482,41 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0" Text="00:00:00" Foreground="#C4C4C4" HorizontalAlignment="Left" FontSize="10" VerticalAlignment="Center" Margin="10"/>
-                    <Slider Grid.Column="1" VerticalAlignment="Center" Minimum="0" Style="{StaticResource HorizontalSliderStyle}"/>
-                    <TextBlock  Grid.Column="2" Text="00:03:46" Foreground="#C4C4C4" HorizontalAlignment="Right" FontSize="10" VerticalAlignment="Center" Margin="10"/>
+                    <TextBlock Name="tbPosition" Grid.Column="0" Text="00:00:00" Foreground="#C4C4C4" HorizontalAlignment="Left" FontSize="10" VerticalAlignment="Center" Margin="10"/>
+                    <Slider Name="sTimeline" Grid.Column="1" VerticalAlignment="Center" Minimum="0" Maximum="100" Style="{StaticResource HorizontalSliderStyle}" GotMouseCapture="STimeline_GotMouseCapture" LostMouseCapture="STimeline_LostMouseCapture"/>
+                    <TextBlock Name="tbDuration" Grid.Column="2" Text="00:03:46" Foreground="#C4C4C4" HorizontalAlignment="Right" FontSize="10" VerticalAlignment="Center" Margin="10"/>
                 </Grid>
 
                 <Separator HorizontalAlignment="Stretch" Background="#555555"/>
 
                 <StackPanel Orientation="Horizontal" Margin="10 5 10 5">
-                    <Button Name="bPrevious" Style="{StaticResource PPPNbuttonStyle}">
+                    <Button Name="bPrevious" Style="{StaticResource PPPNbuttonStyle}" Click="BPrevious_Click">
                         <Canvas Height="24" Width="24">
                             <Path Data="M6,18V6H8V18H6M9.5,12L18,6V18L9.5,12Z" Style="{StaticResource IconInPPPNbuttonStyle}"/>
                         </Canvas>
                     </Button>
 
-                    <Button Name="bPlay" Style="{StaticResource PPPNbuttonStyle}">
+                    <Button Name="bPlay" Style="{StaticResource PPPNbuttonStyle}" Click="BPlay_Click">
                         <Canvas Width="24" Height="24">
                             <Path Data="M8,5.14V19.14L19,12.14L8,5.14Z" Style="{StaticResource IconInPPPNbuttonStyle}"/>
                         </Canvas>
                     </Button>
 
-                    <Button Name="bPause" IsEnabled="False" Visibility="Collapsed" Style="{StaticResource PPPNbuttonStyle}">
+                    <Button Name="bPause" IsEnabled="False" Visibility="Collapsed" Style="{StaticResource PPPNbuttonStyle}" Click="BPause_Click">
                         <Canvas Height="24" Width="24">
                             <Path Data="M14,19H18V5H14M6,19H10V5H6V19Z" Style="{StaticResource IconInPPPNbuttonStyle}"/>
                         </Canvas>
                     </Button>
 
-                    <Button Name="bNext" Style="{StaticResource PPPNbuttonStyle}">
+                    <Button Name="bNext" Style="{StaticResource PPPNbuttonStyle}" Click="BNext_Click">
                         <Canvas Height="24" Width="24">
                             <Path Data="M16,18H18V6H16M6,18L14.5,12L6,6V18Z" Style="{StaticResource IconInPPPNbuttonStyle}"/>
                         </Canvas>
                     </Button>
-                    
-                    <Slider Name="sVolume" Width="50" VerticalAlignment="Center" Margin="10 0 0 0" Maximum="100" Minimum="0" Style="{StaticResource HorizontalSliderStyle}"/>
-                </StackPanel>
 
+                    <Slider Name="sVolume" Width="50" VerticalAlignment="Center" Margin="10 0 0 0" Maximum="1" Minimum="0" Style="{StaticResource HorizontalSliderStyle}" Value="{Binding ElementName=mediaElement, Path=Volume, Mode=TwoWay}"/>
+                </StackPanel>
             </StackPanel>
-            
-            
         </Grid>
     </Grid>
 </Window>

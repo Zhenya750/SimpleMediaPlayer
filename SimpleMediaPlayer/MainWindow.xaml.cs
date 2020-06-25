@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.Windows.Threading;
+using System.Windows.Media.Animation;
 
 namespace SimpleMediaPlayer
 {
@@ -31,6 +33,8 @@ namespace SimpleMediaPlayer
 
             LbMediafile.ItemsSource = _mediafiles;
             _addingMediafiles = new List<Mediafile>();
+
+            
         }
     }
 }

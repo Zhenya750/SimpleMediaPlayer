@@ -35,7 +35,6 @@ namespace SimpleMediaPlayer
 
         private void LbiMediafile_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //Console.WriteLine("mousedown");
             if (sender is ListBoxItem)
             {
                 ListBoxItem lbi = sender as ListBoxItem;
@@ -44,17 +43,10 @@ namespace SimpleMediaPlayer
             }
         }
 
-        private void LbiMediafile_Drop(object sender, DragEventArgs e)
-        {
-
-        }
-
         private void LbMediafile_PreviewDragEnter(object sender, DragEventArgs e)
         {
             if (sender is ListBox)
             {
-                Console.WriteLine("dragenter");
-
                 string[] filenames = (string[])e.Data.GetData(DataFormats.FileDrop, true);
 
                 if (filenames != null && filenames.Length > 0)
@@ -66,12 +58,12 @@ namespace SimpleMediaPlayer
                         string mimetype = MimeTypes.GetMimeType(filename);
                         if (mimetype != null)
                         {
-                            var finfo = new FileInfo(filename);
+                            var mediaInfo = new FileInfo(filename);
 
                             if (mimetype.StartsWith("audio") ||
                                 mimetype.StartsWith("video"))
                             {
-                                _addingMediafiles.Add(new Mediafile(finfo.Name, finfo.FullName));
+                                _addingMediafiles.Add(new Mediafile(mediaInfo.Name, mediaInfo.FullName));
                             }
                         }
                     }
@@ -85,7 +77,6 @@ namespace SimpleMediaPlayer
         {
             if (sender is ListBoxItem)
             {
-                Console.WriteLine("drag enter");
                 var entered = e.Data.GetData(typeof(Mediafile)) as Mediafile;
                 var target = ((ListBoxItem)sender).DataContext as Mediafile;
 
@@ -106,9 +97,8 @@ namespace SimpleMediaPlayer
             }
         }
 
-        private void LbMediafile_PreviewDrop(object sender, DragEventArgs e)
+        private void LbMediafile_Drop(object sender, DragEventArgs e)
         {
-            Console.WriteLine("drop");
             if (sender is ListBox)
             {
                 foreach (var mediafile in _addingMediafiles)
