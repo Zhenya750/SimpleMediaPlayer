@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using System.Windows.Media.Animation;
+using System.Windows.Controls.Primitives;
 
 namespace SimpleMediaPlayer
 {
@@ -25,6 +26,7 @@ namespace SimpleMediaPlayer
 
         private void MediaElement_MediaOpened(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine($"{_currentMediafile.Title} opened");
             _isMediaOpened = true;
 
             sTimeline.Value =
@@ -33,6 +35,7 @@ namespace SimpleMediaPlayer
 
             mediaElement.Position = TimeSpan.FromSeconds(sTimeline.Value);
             StartTimelineAnimation();
+            _currentMediafile.IsValid = true;
         }
 
         private void StartTimelineAnimation()
@@ -58,7 +61,9 @@ namespace SimpleMediaPlayer
         private void STimeline_GotMouseCapture(object sender, MouseEventArgs e)
         {
             if (!_isMediaOpened)
+            {
                 return;
+            }
 
             StopTimelineAnimation();
             // uncomment if video should pause while moving the timeline marker
@@ -68,7 +73,9 @@ namespace SimpleMediaPlayer
         private void STimeline_LostMouseCapture(object sender, MouseEventArgs e)
         {
             if (!_isMediaOpened)
+            {
                 return;
+            }
 
             mediaElement.Position = TimeSpan.FromSeconds(sTimeline.Value);
 
@@ -86,20 +93,61 @@ namespace SimpleMediaPlayer
 
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e)
         {
-            mediaElement.Stop();
-            sTimeline.Value = sTimeline.Minimum;
-            StopTimelineAnimation(false);
-            SetPausedState();
+            Console.WriteLine($"{_currentMediafile.Title} ended");
+            bool startPlayingImmediately = bPause.IsEnabled;
+            Next();
+            if (startPlayingImmediately)
+            {
+                Play();
+            }
         }
 
+        private int InvalidMediafilesCount = 0;
         private void MediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
+            Console.WriteLine($"{_currentMediafile.Title} failed");
+            _currentMediafile.IsValid = false;
+            InvalidMediafilesCount++;
+            if (InvalidMediafilesCount >= (LbMediafile.ItemsSource as ObservableCollection<Mediafile>).Count)
+            {
+                Stop();
+                InvalidMediafilesCount = 0;
+                mediaElement.Source = null;
+                return;
+            }
 
+            Next();
+            Play();
+        }        
+
+        private void BPlay_Click(object sender, RoutedEventArgs e)
+        {
+            Play();
+        }
+
+        private void BPause_Click(object sender, RoutedEventArgs e)
+        {
+            Pause();
         }
 
         private void BPrevious_Click(object sender, RoutedEventArgs e)
         {
+            bool startPlayingImmediately = bPause.IsEnabled;
+            Previous();
+            if (startPlayingImmediately)
+            {
+                Play();
+            }
+        }
 
+        private void BNext_Click(object sender, RoutedEventArgs e)
+        {
+            bool startPlayingImmediately = bPause.IsEnabled;
+            Next();
+            if (startPlayingImmediately)
+            {
+                Play();
+            }
         }
 
         private void SetPlayingState()
@@ -118,10 +166,20 @@ namespace SimpleMediaPlayer
             bPause.Visibility = Visibility.Collapsed;
         }
 
-        private void BPlay_Click(object sender, RoutedEventArgs e)
+        private void Play()
         {
-            SetPlayingState();
+            if (mediaElement.Source == null)
+            {
+                if (_currentMediafile == null)
+                {
+                    return;
+                }
+
+                mediaElement.Source = new Uri(_currentMediafile.Path);
+            }
+
             mediaElement.Play();
+            SetPlayingState();
 
             if (_isMediaOpened)
             {
@@ -129,16 +187,37 @@ namespace SimpleMediaPlayer
             }
         }
 
-        private void BPause_Click(object sender, RoutedEventArgs e)
+        private void Pause()
         {
             SetPausedState();
             mediaElement.Pause();
             StopTimelineAnimation();
         }
 
-        private void BNext_Click(object sender, RoutedEventArgs e)
+        private void Stop()
         {
+            mediaElement.Stop();
+            sTimeline.Value = sTimeline.Minimum;
+            StopTimelineAnimation(false);
+            SetPausedState();
+        }
 
+        private void Next()
+        {
+            Stop();
+            mediaElement.Close();
+            _isMediaOpened = false;
+            mediaElement.Source = null;
+            _currentMediafile = NextMediafile();
+        }
+
+        private void Previous()
+        {
+            Stop();
+            mediaElement.Close();
+            _isMediaOpened = false;
+            mediaElement.Source = null;
+            _currentMediafile = PreviousMediafile();
         }
     }
 }

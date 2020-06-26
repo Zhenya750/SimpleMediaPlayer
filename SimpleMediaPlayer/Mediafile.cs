@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 
 namespace SimpleMediaPlayer
 {
-    public class Mediafile
+    public class Mediafile : INotifyPropertyChanged
     {
         private string _title;
         private string _path;
+        private bool _isValid;
 
         public string Title
         {
             get { return _title; }
-            private set
+             set
             {
                 _title = value;
                 OnPropertyChanged("Title");
@@ -33,13 +34,24 @@ namespace SimpleMediaPlayer
             }
         }
 
+        public bool IsValid
+        {
+            get { return _isValid; }
+            set
+            {
+                _isValid = value;
+                OnPropertyChanged("IsValid");
+            }
+        }
+
         public Mediafile(string title, string path)
         {
             Title = title;
             Path = path;
+            IsValid = true;
         }
 
-        private event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             if (PropertyChanged != null)
@@ -48,7 +60,7 @@ namespace SimpleMediaPlayer
 
         public override string ToString()
         {
-            return String.Format($"Title {Title}, Path {Path}");
+            return String.Format($"Title {Title}, Path {Path}, IsValid {IsValid}");
         }
     }
 }
