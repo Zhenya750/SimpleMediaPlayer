@@ -106,8 +106,6 @@ namespace SimpleMediaPlayer
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e)
         {
             bool startPlayingImmediately = bPause.IsEnabled;
-            sTimeline.IsEnabled = false;
-
             Next();
             if (startPlayingImmediately)
             {
@@ -219,6 +217,8 @@ namespace SimpleMediaPlayer
         {
             mediaElement.Stop();
             sTimeline.Value = sTimeline.Minimum;
+            tbDuration.Text = "00:00:00";
+            sTimeline.IsEnabled = false;
             StopTimelineAnimation(false);
             SetPausedState();
         }
