@@ -229,7 +229,12 @@ namespace SimpleMediaPlayer
             mediaElement.Close();
             _isMediaOpened = false;
             mediaElement.Source = null;
-            _currentMediafile.IsPlaying = false;
+
+            if (_currentMediafile != null)
+            {
+                _currentMediafile.IsPlaying = false;
+            }
+
             _currentMediafile = NextMediafile();
         }
 
@@ -239,7 +244,12 @@ namespace SimpleMediaPlayer
             mediaElement.Close();
             _isMediaOpened = false;
             mediaElement.Source = null;
-            _currentMediafile.IsPlaying = false;
+
+            if (_currentMediafile != null)
+            {
+                _currentMediafile.IsPlaying = false;
+            }
+
             _currentMediafile = PreviousMediafile();
         }
     }
