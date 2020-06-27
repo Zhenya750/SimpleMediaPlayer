@@ -22,35 +22,54 @@ namespace SimpleMediaPlayer
         private List<Mediafile> _addingMediafiles;
         private int _addingMediafilesIndex;
         private Mediafile _currentMediafile;
-        private Mediafile _prevMediafile;
+        private int _currentMediafileIndexWhenRemove = -1;
 
         private Mediafile NextMediafile()
         {
             var mediafiles = LbMediafile.ItemsSource as ObservableCollection<Mediafile>;
 
-            if (mediafiles.Contains(_currentMediafile) == false)
-                return null;
+            if (_currentMediafileIndexWhenRemove > -1 &&
+                _currentMediafileIndexWhenRemove < mediafiles.Count)
+            {
+                _currentMediafile = mediafiles[_currentMediafileIndexWhenRemove];
+                _currentMediafileIndexWhenRemove = -1;
+                return _currentMediafile;
+            }
+
+            if (_currentMediafileIndexWhenRemove >= mediafiles.Count)
+            {
+                _currentMediafileIndexWhenRemove = -1;
+                return mediafiles.FirstOrDefault();
+            }
 
             var _currentMediafileIndex = mediafiles.IndexOf(_currentMediafile);
-            return mediafiles[(_currentMediafileIndex + 1) % mediafiles.Count];
+            return _currentMediafileIndex > -1 ? 
+                mediafiles[(_currentMediafileIndex + 1) % mediafiles.Count] :
+                null;
         }
 
         private Mediafile PreviousMediafile()
         {
             var mediafiles = LbMediafile.ItemsSource as ObservableCollection<Mediafile>;
 
-            if (_prevMediafile != null)
+            if (_currentMediafileIndexWhenRemove > -1 &&
+                _currentMediafileIndexWhenRemove < mediafiles.Count)
             {
-                _currentMediafile = _prevMediafile;
-                _prevMediafile = null;
+                _currentMediafile = mediafiles[(mediafiles.Count + _currentMediafileIndexWhenRemove - 1) % mediafiles.Count];
+                _currentMediafileIndexWhenRemove = -1;
                 return _currentMediafile;
             }
 
-            if (mediafiles.Contains(_currentMediafile) == false)
-                return null;
+            if (_currentMediafileIndexWhenRemove >= mediafiles.Count)
+            {
+                _currentMediafileIndexWhenRemove = -1;
+                return mediafiles.LastOrDefault();
+            }
 
             var _currentMediafileIndex = mediafiles.IndexOf(_currentMediafile);
-            return mediafiles[(mediafiles.Count + _currentMediafileIndex - 1) % mediafiles.Count];
+            return _currentMediafileIndex > -1 ?
+                mediafiles[(mediafiles.Count + _currentMediafileIndex - 1) % mediafiles.Count] :
+                null;
         }
 
         private void BRemoveLbiMediafile_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -59,22 +78,13 @@ namespace SimpleMediaPlayer
             {
                 var mediafiles = LbMediafile.ItemsSource as ObservableCollection<Mediafile>;
                 var mediafileToRemove = (sender as Button).DataContext as Mediafile;
-
+                
                 if (mediafileToRemove == _currentMediafile)
                 {
-                    _prevMediafile = PreviousMediafile();
+                    _currentMediafileIndexWhenRemove = mediafiles.IndexOf(_currentMediafile);
                 }
 
                 mediafiles.Remove(mediafileToRemove);
-
-                if (mediafiles.Count == 0)
-                {
-                    _currentMediafile = null;
-                }
-                else if (mediafileToRemove == _currentMediafile)
-                {
-                    _currentMediafile = _prevMediafile;
-                }
             }
             catch (Exception ex)
             {
