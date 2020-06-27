@@ -59,7 +59,12 @@ namespace SimpleMediaPlayer
             {
                 var mediafiles = LbMediafile.ItemsSource as ObservableCollection<Mediafile>;
                 var mediafileToRemove = (sender as Button).DataContext as Mediafile;
-                _prevMediafile = PreviousMediafile();
+
+                if (mediafileToRemove == _currentMediafile)
+                {
+                    _prevMediafile = PreviousMediafile();
+                }
+
                 mediafiles.Remove(mediafileToRemove);
 
                 if (mediafiles.Count == 0)
