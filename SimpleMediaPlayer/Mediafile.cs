@@ -13,11 +13,12 @@ namespace SimpleMediaPlayer
         private string _title;
         private string _path;
         private bool _isValid;
+        private bool _isPlaying;
 
         public string Title
         {
             get { return _title; }
-             set
+            private set
             {
                 _title = value;
                 OnPropertyChanged("Title");
@@ -44,11 +45,22 @@ namespace SimpleMediaPlayer
             }
         }
 
+        public bool IsPlaying
+        {
+            get { return _isPlaying; }
+            set
+            {
+                _isPlaying = value;
+                OnPropertyChanged("IsPlaying");
+            }
+        }
+
         public Mediafile(string title, string path)
         {
             Title = title;
             Path = path;
             IsValid = true;
+            IsPlaying = false;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

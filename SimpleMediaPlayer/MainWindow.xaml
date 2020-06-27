@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleMediaPlayer"
         mc:Ignorable="d"
-        Title="MediaPlayer" Height="450" Width="800">
+        Title="MediaPlayer" Height="452.4" Width="780.8">
     <Window.Resources>
         <!--ListBoxItem style-->
         <Style x:Key="FocusVisual">
@@ -68,6 +68,9 @@
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
                             </Trigger>
+                            <DataTrigger Binding="{Binding Path=IsPlaying}" Value="True">
+                                <Setter Property="Foreground" Value="White"/>
+                            </DataTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -421,7 +424,7 @@
             <ListBox
                      Name="LbMediafile"
                      Grid.Row="0"
-                     SelectionMode="Single" 
+                     SelectionMode="Single"
                      Background="#363636"
                      BorderThickness="0"
                      BorderBrush="#363636"
@@ -432,7 +435,7 @@
                      PreviewDragEnter="LbMediafile_PreviewDragEnter" 
                      Drop="LbMediafile_Drop" 
                      ItemContainerStyle="{DynamicResource ListBoxItemStyle}">
-            
+
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}" Height="32">
@@ -440,7 +443,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="64"/>
                             </Grid.ColumnDefinitions>
-                            
+
                             <TextBlock Grid.Column="0" TextTrimming="CharacterEllipsis" Text="{Binding Path=Title}" Margin="0" VerticalAlignment="Center">
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">
@@ -452,7 +455,7 @@
                                     </Style>
                                 </TextBlock.Style>
                             </TextBlock>
-                            
+
                             <Button x:Name="bRemoveLbiMediafile" 
                                     Grid.Column="1" 
                                     Width="22" Height="22" 
@@ -482,7 +485,7 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <MediaElement Name="mediaElement" LoadedBehavior="Manual" UnloadedBehavior="Close" ScrubbingEnabled="True" MediaOpened="MediaElement_MediaOpened" MediaEnded="MediaElement_MediaEnded" MediaFailed="MediaElement_MediaFailed" />
+            <MediaElement Name="mediaElement" Grid.Row="0" LoadedBehavior="Manual" UnloadedBehavior="Stop" ScrubbingEnabled="True" MediaOpened="MediaElement_MediaOpened" MediaEnded="MediaElement_MediaEnded" MediaFailed="MediaElement_MediaFailed"/>
 
             <StackPanel Orientation="Vertical" Grid.Row="1" Background="#404040">
 
@@ -494,8 +497,8 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Name="tbPosition" Grid.Column="0" Text="00:00:00" Foreground="#C4C4C4" HorizontalAlignment="Left" FontSize="10" VerticalAlignment="Center" Margin="10"/>
-                    <Slider Name="sTimeline" Grid.Column="1" VerticalAlignment="Center" Minimum="0" Maximum="100" Style="{StaticResource HorizontalSliderStyle}" GotMouseCapture="STimeline_GotMouseCapture" LostMouseCapture="STimeline_LostMouseCapture"/>
-                    <TextBlock Name="tbDuration" Grid.Column="2" Text="00:03:46" Foreground="#C4C4C4" HorizontalAlignment="Right" FontSize="10" VerticalAlignment="Center" Margin="10"/>
+                    <Slider Name="sTimeline" IsEnabled="False" Grid.Column="1" VerticalAlignment="Center" Minimum="0" Maximum="100" Style="{StaticResource HorizontalSliderStyle}" GotMouseCapture="STimeline_GotMouseCapture" LostMouseCapture="STimeline_LostMouseCapture" ValueChanged="STimeline_ValueChanged"/>
+                    <TextBlock Name="tbDuration" Grid.Column="2" Text="00:00:00" Foreground="#C4C4C4" HorizontalAlignment="Right" FontSize="10" VerticalAlignment="Center" Margin="10"/>
                 </Grid>
 
                 <Separator HorizontalAlignment="Stretch" Background="#555555"/>

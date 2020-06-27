@@ -27,7 +27,6 @@ namespace SimpleMediaPlayer
             _mediafiles = new ObservableCollection<Mediafile>();
             LbMediafile.ItemsSource = _mediafiles;
             _addingMediafiles = new List<Mediafile>();
-            
         }
     }
 }

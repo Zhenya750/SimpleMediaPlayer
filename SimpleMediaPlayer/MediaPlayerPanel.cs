@@ -23,11 +23,18 @@ namespace SimpleMediaPlayer
     {
         private DoubleAnimation _sTimelineAnimation = new DoubleAnimation();
         private bool _isMediaOpened = false;
+        private int _invalidMediafilesCount = 0;
+        private bool _previousButtonWasClicked = false;
+
+        private void STimeline_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            tbPosition.Text = TimeSpan.FromSeconds(sTimeline.Value).ToString(@"hh\:mm\:ss");
+        }
 
         private void MediaElement_MediaOpened(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine($"{_currentMediafile.Title} opened");
             _isMediaOpened = true;
+            tbDuration.Text = mediaElement.NaturalDuration.TimeSpan.ToString(@"hh\:mm\:ss");
 
             sTimeline.Value =
                 sTimeline.Value / sTimeline.Maximum
@@ -35,7 +42,12 @@ namespace SimpleMediaPlayer
 
             mediaElement.Position = TimeSpan.FromSeconds(sTimeline.Value);
             StartTimelineAnimation();
+
             _currentMediafile.IsValid = true;
+            _currentMediafile.IsPlaying = true;
+            _invalidMediafilesCount = 0;
+            _previousButtonWasClicked = false;
+            sTimeline.IsEnabled = true;
         }
 
         private void StartTimelineAnimation()
@@ -66,7 +78,7 @@ namespace SimpleMediaPlayer
             }
 
             StopTimelineAnimation();
-            // uncomment if video should pause while moving the timeline marker
+            // uncomment if video should pause while moving the timeline thumb
             mediaElement.Pause();
         }
 
@@ -93,8 +105,9 @@ namespace SimpleMediaPlayer
 
         private void MediaElement_MediaEnded(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine($"{_currentMediafile.Title} ended");
             bool startPlayingImmediately = bPause.IsEnabled;
+            sTimeline.IsEnabled = false;
+
             Next();
             if (startPlayingImmediately)
             {
@@ -102,21 +115,28 @@ namespace SimpleMediaPlayer
             }
         }
 
-        private int InvalidMediafilesCount = 0;
         private void MediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            Console.WriteLine($"{_currentMediafile.Title} failed");
             _currentMediafile.IsValid = false;
-            InvalidMediafilesCount++;
-            if (InvalidMediafilesCount >= (LbMediafile.ItemsSource as ObservableCollection<Mediafile>).Count)
+            _invalidMediafilesCount++;
+            if (_invalidMediafilesCount >= (LbMediafile.ItemsSource as ObservableCollection<Mediafile>).Count)
             {
                 Stop();
-                InvalidMediafilesCount = 0;
+                _invalidMediafilesCount = 0;
+                _previousButtonWasClicked = false;
                 mediaElement.Source = null;
                 return;
             }
 
-            Next();
+            if (_previousButtonWasClicked)
+            {
+                Previous();
+            }
+            else
+            {
+                Next();
+            }
+
             Play();
         }        
 
@@ -132,6 +152,7 @@ namespace SimpleMediaPlayer
 
         private void BPrevious_Click(object sender, RoutedEventArgs e)
         {
+            _previousButtonWasClicked = true;
             bool startPlayingImmediately = bPause.IsEnabled;
             Previous();
             if (startPlayingImmediately)
@@ -208,6 +229,7 @@ namespace SimpleMediaPlayer
             mediaElement.Close();
             _isMediaOpened = false;
             mediaElement.Source = null;
+            _currentMediafile.IsPlaying = false;
             _currentMediafile = NextMediafile();
         }
 
@@ -217,6 +239,7 @@ namespace SimpleMediaPlayer
             mediaElement.Close();
             _isMediaOpened = false;
             mediaElement.Source = null;
+            _currentMediafile.IsPlaying = false;
             _currentMediafile = PreviousMediafile();
         }
     }
