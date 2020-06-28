@@ -25,6 +25,7 @@ namespace SimpleMediaPlayer
         private bool _isMediaOpened = false;
         private int _invalidMediafilesCount = 0;
         private bool _previousButtonWasClicked = false;
+        private int someIntegerValue = 0;
 
         private void STimeline_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
