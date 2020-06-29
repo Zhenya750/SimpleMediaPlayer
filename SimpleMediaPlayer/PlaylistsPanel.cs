@@ -15,11 +15,14 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
 using System.Windows.Media.Animation;
+using System.Windows.Controls.Primitives;
 
 namespace SimpleMediaPlayer
 {
     public partial class MainWindow : Window
     {
+        private Playlists _playlists;
+
         private void BAddNewPlaylist_Click(object sender, RoutedEventArgs e)
         {
             var textBox = cbPlaylists.Template.FindName("tbNewPlaylistTitle", cbPlaylists) as TextBox;
@@ -28,6 +31,7 @@ namespace SimpleMediaPlayer
                 if (cbPlaylists.Items.Contains(textBox.Text) == false)
                 {
                     cbPlaylists.Items.Add(textBox.Text);
+                    _playlists.AddPlaylist(textBox.Text);
                     textBox.Text = "";
                 }
             }
@@ -35,7 +39,43 @@ namespace SimpleMediaPlayer
 
         private void BRemovePlaylist_Click(object sender, RoutedEventArgs e)
         {
-            cbPlaylists.Items.Remove((sender as Button).DataContext);
+            string playlistTitle = (sender as Button).DataContext as string;
+            cbPlaylists.Items.Remove(playlistTitle);
+            _playlists.RemovePlaylist(playlistTitle);
+        }
+
+        private void CbPlaylists_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            var playlistTitle = cbPlaylists.SelectedItem as string;
+
+            if (playlistTitle == null)
+            {
+                if (cbPlaylists.Items.Count == 0)
+                {
+                    CreatePlaylist("Default");
+                }
+                else
+                {
+                    string anyPlaylist = cbPlaylists.Items[0] as string;
+                    _playlists.SetCurrentPlaylist(anyPlaylist);
+                    cbPlaylists.SelectedItem = anyPlaylist;
+                }
+            }
+            else
+            {
+                _playlists.SetCurrentPlaylist(playlistTitle);
+                LbMediafile.ItemsSource = _playlists.CurrentPlaylist.Mediafiles;
+            }
+        }
+
+        private void CreatePlaylist(string title)
+        {
+            if (cbPlaylists.Items.Contains(title) == false)
+            {
+                cbPlaylists.Items.Add(title);
+                _playlists.SetCurrentPlaylist(title);
+                cbPlaylists.SelectedItem = title;
+            }
         }
     }
 }

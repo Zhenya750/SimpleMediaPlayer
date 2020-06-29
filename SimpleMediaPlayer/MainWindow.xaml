@@ -941,6 +941,7 @@
                       Padding="5 0 0 0"
                       VerticalContentAlignment="Center"
                       IsEditable="False" 
+                      SelectionChanged="CbPlaylists_SelectionChanged"
                       Style="{DynamicResource ComboBoxStyle}"
                       ItemContainerStyle="{DynamicResource ComboBoxItemStyle}">
 

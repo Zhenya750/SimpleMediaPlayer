@@ -24,8 +24,10 @@ namespace SimpleMediaPlayer
         {
             InitializeComponent();
 
-            _playlist = new Playlist();
-            LbMediafile.ItemsSource = _playlist.Mediafiles;
+            _playlists = new Playlists();
+
+            CreatePlaylist("Default");
+            LbMediafile.ItemsSource = _playlists.CurrentPlaylist.Mediafiles;
             _addingMediafiles = new List<Mediafile>();
         }
     }

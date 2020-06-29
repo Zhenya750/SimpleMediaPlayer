@@ -18,7 +18,7 @@ namespace SimpleMediaPlayer
 {
     public partial class MainWindow : Window
     {
-        private Playlist _playlist;
+        //private Playlist _playlist;
         private List<Mediafile> _addingMediafiles;
         private int _addingMediafilesIndex;
 
@@ -26,7 +26,7 @@ namespace SimpleMediaPlayer
         {
             try
             {
-                _playlist.RemoveMediafile((sender as Button).DataContext as Mediafile);
+                _playlists.CurrentPlaylist.RemoveMediafile((sender as Button).DataContext as Mediafile);
             }
             catch (Exception ex)
             {
@@ -135,9 +135,9 @@ namespace SimpleMediaPlayer
 
         private void AddMediafiles()
         {
-            _playlist.AddMediafiles(_addingMediafiles, _addingMediafilesIndex);
+            _playlists.CurrentPlaylist.AddMediafiles(_addingMediafiles, _addingMediafilesIndex);
             _addingMediafiles.Clear();
-            _addingMediafilesIndex = _playlist.Mediafiles.Count;
+            _addingMediafilesIndex = _playlists.CurrentPlaylist.Mediafiles.Count;
         }
     }
 }
