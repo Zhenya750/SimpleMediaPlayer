@@ -66,7 +66,7 @@ namespace SimpleMediaPlayer
 
         public void AddMediafiles(ICollection<Mediafile> mediafiles, int index = -1)
         {
-            if (mediafiles == null)
+            if (mediafiles == null || mediafiles.Count == 0)
             {
                 return;
             }
