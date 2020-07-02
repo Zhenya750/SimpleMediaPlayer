@@ -44,6 +44,7 @@
     <Reference Include="MimeKit, Version=2.8.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
       <HintPath>..\packages\MimeKit.2.8.0\lib\net48\MimeKit.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Security" />
@@ -73,6 +74,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ComboBoxItemTemplateSelector.cs" />
     <Compile Include="LbiMediafile.cs" />
     <Compile Include="Mediafile.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -82,6 +84,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MediaPlayerPanel.cs" />
+    <Compile Include="Playlist.cs" />
+    <Compile Include="Playlists.cs" />
+    <Compile Include="PlaylistsPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

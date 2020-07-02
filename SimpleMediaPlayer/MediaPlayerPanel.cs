@@ -43,8 +43,8 @@ namespace SimpleMediaPlayer
             mediaElement.Position = TimeSpan.FromSeconds(sTimeline.Value);
             StartTimelineAnimation();
 
-            _currentMediafile.IsValid = true;
-            _currentMediafile.IsPlaying = true;
+            _playlists.CurrentPlaylist.CurrentMediafile.IsValid = true;
+            _playlists.CurrentPlaylist.CurrentMediafile.IsPlaying = true;
             _invalidMediafilesCount = 0;
             _previousButtonWasClicked = false;
             sTimeline.IsEnabled = true;
@@ -115,7 +115,7 @@ namespace SimpleMediaPlayer
 
         private void MediaElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            _currentMediafile.IsValid = false;
+            _playlists.CurrentPlaylist.CurrentMediafile.IsValid = false;
             _invalidMediafilesCount++;
             if (_invalidMediafilesCount >= (LbMediafile.ItemsSource as ObservableCollection<Mediafile>).Count)
             {
@@ -189,12 +189,12 @@ namespace SimpleMediaPlayer
         {
             if (mediaElement.Source == null)
             {
-                if (_currentMediafile == null)
+                if (_playlists.CurrentPlaylist.CurrentMediafile == null)
                 {
                     return;
                 }
 
-                mediaElement.Source = new Uri(_currentMediafile.Path);
+                mediaElement.Source = new Uri(_playlists.CurrentPlaylist.CurrentMediafile.Path);
             }
 
             mediaElement.Play();
@@ -230,12 +230,12 @@ namespace SimpleMediaPlayer
             _isMediaOpened = false;
             mediaElement.Source = null;
 
-            if (_currentMediafile != null)
+            if (_playlists.CurrentPlaylist.CurrentMediafile != null)
             {
-                _currentMediafile.IsPlaying = false;
+                _playlists.CurrentPlaylist.CurrentMediafile.IsPlaying = false;
             }
 
-            _currentMediafile = NextMediafile();
+            _playlists.CurrentPlaylist.NextMediafile();
         }
 
         private void Previous()
@@ -245,12 +245,12 @@ namespace SimpleMediaPlayer
             _isMediaOpened = false;
             mediaElement.Source = null;
 
-            if (_currentMediafile != null)
+            if (_playlists.CurrentPlaylist.CurrentMediafile != null)
             {
-                _currentMediafile.IsPlaying = false;
+                _playlists.CurrentPlaylist.CurrentMediafile.IsPlaying = false;
             }
 
-            _currentMediafile = PreviousMediafile();
+            _playlists.CurrentPlaylist.PreviousMediafile();
         }
     }
 }

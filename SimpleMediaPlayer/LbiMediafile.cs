@@ -18,73 +18,15 @@ namespace SimpleMediaPlayer
 {
     public partial class MainWindow : Window
     {
-        private ObservableCollection<Mediafile> _mediafiles;
+        //private Playlist _playlist;
         private List<Mediafile> _addingMediafiles;
         private int _addingMediafilesIndex;
-        private Mediafile _currentMediafile;
-        private int _currentMediafileIndexWhenRemove = -1;
-
-        private Mediafile NextMediafile()
-        {
-            var mediafiles = LbMediafile.ItemsSource as ObservableCollection<Mediafile>;
-
-            if (_currentMediafileIndexWhenRemove > -1 &&
-                _currentMediafileIndexWhenRemove < mediafiles.Count)
-            {
-                _currentMediafile = mediafiles[_currentMediafileIndexWhenRemove];
-                _currentMediafileIndexWhenRemove = -1;
-                return _currentMediafile;
-            }
-
-            if (_currentMediafileIndexWhenRemove >= mediafiles.Count)
-            {
-                _currentMediafileIndexWhenRemove = -1;
-                return mediafiles.FirstOrDefault();
-            }
-
-            var _currentMediafileIndex = mediafiles.IndexOf(_currentMediafile);
-            return _currentMediafileIndex > -1 ? 
-                mediafiles[(_currentMediafileIndex + 1) % mediafiles.Count] :
-                null;
-        }
-
-        private Mediafile PreviousMediafile()
-        {
-            var mediafiles = LbMediafile.ItemsSource as ObservableCollection<Mediafile>;
-
-            if (_currentMediafileIndexWhenRemove > -1 &&
-                _currentMediafileIndexWhenRemove < mediafiles.Count)
-            {
-                _currentMediafile = mediafiles[(mediafiles.Count + _currentMediafileIndexWhenRemove - 1) % mediafiles.Count];
-                _currentMediafileIndexWhenRemove = -1;
-                return _currentMediafile;
-            }
-
-            if (_currentMediafileIndexWhenRemove >= mediafiles.Count)
-            {
-                _currentMediafileIndexWhenRemove = -1;
-                return mediafiles.LastOrDefault();
-            }
-
-            var _currentMediafileIndex = mediafiles.IndexOf(_currentMediafile);
-            return _currentMediafileIndex > -1 ?
-                mediafiles[(mediafiles.Count + _currentMediafileIndex - 1) % mediafiles.Count] :
-                null;
-        }
 
         private void BRemoveLbiMediafile_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             try
             {
-                var mediafiles = LbMediafile.ItemsSource as ObservableCollection<Mediafile>;
-                var mediafileToRemove = (sender as Button).DataContext as Mediafile;
-                
-                if (mediafileToRemove == _currentMediafile)
-                {
-                    _currentMediafileIndexWhenRemove = mediafiles.IndexOf(_currentMediafile);
-                }
-
-                mediafiles.Remove(mediafileToRemove);
+                _playlists.CurrentPlaylist.RemoveMediafile((sender as Button).DataContext as Mediafile);
             }
             catch (Exception ex)
             {
@@ -193,25 +135,9 @@ namespace SimpleMediaPlayer
 
         private void AddMediafiles()
         {
-            if (_addingMediafiles == null ||
-                _addingMediafiles.Count == 0)
-            {
-                return;
-            }
-
-            var mediafiles = LbMediafile.ItemsSource as ObservableCollection<Mediafile>;
-
-            foreach (var mediafile in _addingMediafiles)
-                mediafiles.Insert(_addingMediafilesIndex, mediafile);
-
-            if (_currentMediafile == null)
-            {
-                // choose the first mediafile on default
-                _currentMediafile = mediafiles.First();
-            }
-
+            _playlists.CurrentPlaylist.AddMediafiles(_addingMediafiles, _addingMediafilesIndex);
             _addingMediafiles.Clear();
-            _addingMediafilesIndex = mediafiles.Count;
+            _addingMediafilesIndex = _playlists.CurrentPlaylist.Mediafiles.Count;
         }
     }
 }
